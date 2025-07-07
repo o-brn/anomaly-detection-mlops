@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual Environment 
+.venv/
+venv/
+env/
+uv.lock 
+
+# IDE - VS Code
+.vscode/
+
+# Logs 
+*.log
+*.tmp
+temp/
+tmp/
+
+# OS Files (Windows)
+Thumbs.db
