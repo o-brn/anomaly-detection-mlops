@@ -13,4 +13,4 @@ A abordagem inicial utiliza um modelo IsolationForest do scikit-learn. Este é u
 
 ## Resultados Iniciais:
 
-![Modelo com desempenho baixo — excesso de detecções irrelevantes](https://raw.githubusercontent.com/o-brn/anomaly-detection-mlops/main/docs/images/anonewplot.png))
+![Modelo com desempenho baixo — excesso de detecções irrelevantes](https://raw.githubusercontent.com/o-brn/anomaly-detection-mlops/main/docs/images/anonewplot.png)
