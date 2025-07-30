@@ -1,0 +1,52 @@
+# Nome do Workflow
+name: CI Pipeline
+
+# Gatilhos
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Jobs
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      # 1. Checkout do código
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Configuração do Python
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          # O cache do uv é gerenciado pela action setup-python, tornando-o muito eficiente
+          cache: 'uv'
+
+      # 3. Instalação de dependências com UV
+      # Instala uv e depois usa-o para instalar as dependências do projeto e de desenvolvimento
+      # definidas no pyproject.toml. 
+      - name: Install dependencies with uv
+        run: |
+          pip install uv
+          uv pip install .[dev]
+        shell: pwsh
+
+      # 4. Verificação de formatação com Ruff
+      - name: Check formatting with Ruff
+        run: ruff format --check .
+
+      # 5. Linting com Ruff
+      - name: Lint with Ruff
+        run: ruff check .
+
+      # 6. Verificação de tipos com Mypy
+      - name: Type check with Mypy
+        run: mypy .
+
+      # 7. Execução dos testes com Pytest
+      - name: Test with pytest
+        run: pytest
