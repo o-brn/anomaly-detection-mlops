@@ -14,3 +14,21 @@ A abordagem inicial utiliza um modelo IsolationForest do scikit-learn. Este é u
 ## Resultados Iniciais:
 
 ![Modelo com desempenho baixo — excesso de detecções irrelevantes](https://raw.githubusercontent.com/o-brn/anomaly-detection-mlops/main/docs/images/anonewplot.png)
+
+
+## Convenção de Commits
+
+Este projeto usa a [Commits Convencionais](https://www.conventionalcommits.org/en/v1.0.0/), com o propósito de obter um histórico de commits legíveis e que facilitem alterações futuras. Abaixo seguem os tipos mais comuns utilizados:
+
+| Tipo     | Título                 | Descrição                                                                   |
+|----------|------------------------|-----------------------------------------------------------------------------|
+| feat     | Features               | Nova funcionalidade para o usuário.                                         |
+| fix      | Correções de Bugs      | Correção de bug para o usuário.                                             |
+| docs     | Documentação           | Alterações apenas na documentação.                                          |
+| style    | Estilos                | Alterações de estilo de código.                                             |
+| refactor | Refatoração de Código  | Alteração de código que não corrige um bug nem adiciona uma funcionalidade. |
+| perf     | Desempenho             | Uma alteração de código que melhora o desempenho.                           |
+| test     | Testes                 | Adicionando ou corrigindo testes.                                           |
+| build    | Sistema de Build       | Alterações no sistema de build ou dependências.                             |
+| ci       | CI/CD                  | Alterações nos arquivos e scripts de CI/CD.                                 |
+| chore    | Tarefas                | Outras alterações que não modificam os arquivos src ou test.                |
