@@ -22,8 +22,8 @@ Este projeto usa a [Commits Convencionais](https://www.conventionalcommits.org/e
 
 | Tipo     | Título                 | Descrição                                                                   |
 |----------|------------------------|-----------------------------------------------------------------------------|
-| feat     | Features               | Nova funcionalidade para o usuário.                                         |
-| fix      | Correções de Bugs      | Correção de bug para o usuário.                                             |
+| feat     | Features               | Nova funcionalidade.                                                        |
+| fix      | Correções de Bugs      | Correção de bug.                                                            |
 | docs     | Documentação           | Alterações apenas na documentação.                                          |
 | style    | Estilos                | Alterações de estilo de código.                                             |
 | refactor | Refatoração de Código  | Alteração de código que não corrige um bug nem adiciona uma funcionalidade. |
