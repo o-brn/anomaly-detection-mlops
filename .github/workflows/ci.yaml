@@ -1,52 +1,77 @@
-# Nome do Workflow
 name: CI Pipeline
 
-# Gatilhos
+# Define os gatilhos que iniciam o workflow.
 on:
+  # Executa em cada push.
   push:
     branches: [ main ]
+  # Executa em cada pull request aberto ou atualizado.
   pull_request:
     branches: [ main ]
 
-# Jobs
+# Define a lista de jobs.
 jobs:
+  # O nome do job. 
   build-and-test:
+    # Define o tipo de máquina virtual que executará o job.
     runs-on: windows-latest
 
+    # Define a sequência de passos.
     steps:
-      # 1. Checkout do código
+      # Passo 1: Clona o código do seu repositório para a máquina virtual.
+      # A action 'checkout' é essencial para que o workflow possa acessar seus arquivos.
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # 2. Configuração do Python
+      # Passo 2: Configura o ambiente Python na versão especificada.
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          # O cache do uv é gerenciado pela action setup-python, tornando-o muito eficiente
-          cache: 'uv'
 
-      # 3. Instalação de dependências com UV
-      # Instala uv e depois usa-o para instalar as dependências do projeto e de desenvolvimento
-      # definidas no pyproject.toml. 
-      - name: Install dependencies with uv
-        run: |
-          pip install uv
-          uv pip install .[dev]
+      # Passo 3: Instala a ferramenta 'uv'.
+      - name: Install uv
+        run: pip install uv
         shell: pwsh
 
-      # 4. Verificação de formatação com Ruff
+      # Passo 4: Descobre onde o 'uv' guarda seus arquivos de cache.
+      # Este passo é importante para informar à action de cache qual diretório salvar.
+      - name: Get uv cache directory
+        id: get-uv-cache-dir # Define um ID para este passo, para que possamos usar seu resultado depois.
+        run: echo "UV_CACHE_DIR=$(uv cache dir)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        shell: pwsh
+
+      # Passo 5: Gerencia o cache das dependências para acelerar futuras execuções.
+      - name: Cache uv dependencies
+        uses: actions/cache@v4
+        with:
+          # Define qual diretório deve ser salvo no cache (o que descobrimos no passo anterior).
+          path: ${{ steps.get-uv-cache-dir.outputs.UV_CACHE_DIR }}
+          # Cria uma chave única para o cache. Se o 'pyproject.toml' mudar, a chave muda e um novo cache é criado.
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/pyproject.toml') }}
+          # Chave alternativa para restauração, caso a chave exata não seja encontrada.
+          restore-keys: |
+            ${{ runner.os }}-uv-
+
+      # Passo 6: Instala as dependências do projeto e de desenvolvimento usando o 'uv'.
+      # Se o cache foi restaurado com sucesso no passo anterior, este comando será quase instantâneo.
+      - name: Install dependencies with uv
+        run: uv pip install .[dev]
+        shell: pwsh
+
+      # Passo 7: Verifica se a formatação do código está correta com o Ruff.
+      # O '--check' não modifica os arquivos, apenas falha se houver erro de formatação.
       - name: Check formatting with Ruff
         run: ruff format --check .
 
-      # 5. Linting com Ruff
+      # Passo 8: Analisa o código em busca de possíveis erros, bugs e problemas de estilo com o linter do Ruff.
       - name: Lint with Ruff
         run: ruff check .
 
-      # 6. Verificação de tipos com Mypy
+      # Passo 9: Realiza a verificação estática de tipos para encontrar inconsistências entre os tipos de dados.
       - name: Type check with Mypy
         run: mypy .
 
-      # 7. Execução dos testes com Pytest
+      # Passo 10: Executa a suíte de testes automatizados do projeto com o Pytest.
       - name: Test with pytest
         run: pytest
