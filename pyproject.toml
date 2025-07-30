@@ -16,3 +16,54 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.5",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy"
+]
+
+
+[tool.ruff]
+# Define o comprimento máximo da linha para o linter e o formatador.
+line-length = 100
+# Especifica a versão do Python alvo para garantir que as regras e formatação
+# sejam compatíveis.
+target-version = "py312"
+
+[tool.ruff.lint]
+# Seleciona os conjuntos de regras a serem ativados.
+# Seleciona os conjuntos de regras a serem ativados.
+# E = erros pycodestyle
+# W = avisos pycodestyle
+# F = erros Pyflakes
+# I = regras isort
+# B = regras flake8-bugbear (deteta bugs comuns)
+# C90 = regras de complexidade mccabe
+select = ["E", "F", "I"]
+
+# Ignora regras E501 (linha longa), D100 (falta de docstring no módulo) 
+ignore = ["E501", "D100"]
+
+[tool.ruff.format]
+# O formatador do Ruff foi projetado para ser um substituto direto do Black.
+# Estas são as configurações padrão para compatibilidade com Black, mas são mostradas para clareza.
+quote-style = "double"
+indent-style = "space"
+
+
+[tool.mypy]
+# Corresponde à versão Python do seu projeto.
+python_version = "3.12"
+
+# Ativa o modo estrito para a máxima segurança de tipos.
+strict = true
+
+# Mostra códigos de erro na saída.
+show_error_codes = true
+
+# Suprime erros para bibliotecas sem stubs de tipo.
+ignore_missing_imports = true
+
+# Avisa se um '# type: ignore' não for mais necessário.
+warn_unused_ignores = true
