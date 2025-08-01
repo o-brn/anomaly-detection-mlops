@@ -5,7 +5,7 @@ from src.data_processing import load_and_preprocess_data
 
 
 @pytest.fixture
-def sample_csv_file(tmp_path):
+def sample_csv_file(tmp_path) -> None:
     """
     Cria um arquivo CSV temporário para os testes.
     Usa a fixture 'tmp_path' do pytest para criar um diretório temporário.
@@ -16,7 +16,7 @@ def sample_csv_file(tmp_path):
     return str(file_path)
 
 
-def test_load_and_preprocess_data(sample_csv_file):
+def test_load_and_preprocess_data(sample_csv_file) -> pd.DataFrame:
     # Arrange (Organizar): A fixture 'sample_csv_file' já preparou o ambiente.
 
     # Act (Agir): Chamar a função que está sendo testada.

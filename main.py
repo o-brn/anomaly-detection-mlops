@@ -1,4 +1,4 @@
-def main():
+def main() -> None:
     print("Hello from anomaly-detection-mlops!")
 
 
