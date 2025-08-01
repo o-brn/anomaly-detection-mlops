@@ -34,14 +34,28 @@ jobs:
         run: pip install uv
         shell: pwsh
 
-      # Passo 4: Descobre onde o 'uv' guarda seus arquivos de cache.
+      # Passo 4: Cria o ambiente virtual.
+      # O comando 'uv venv' cria uma pasta .venv com um ambiente Python isolado.
+      - name: Create Virtual Environment
+        run: uv venv .venv
+        shell: pwsh
+
+      # Passo 5: Adiciona os scripts do venv ao PATH do GitHub Actions.
+      # Isso torna os executáveis instalados no venv (ruff, mypy, pytest)
+      # disponíveis para os passos seguintes do workflow.
+      - name: Add venv to PATH
+        run: echo ".\.venv\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+        shell: pwsh
+
+
+      # Passo 6: Descobre onde o 'uv' guarda seus arquivos de cache.
       # Este passo é importante para informar à action de cache qual diretório salvar.
       - name: Get uv cache directory
         id: get-uv-cache-dir # Define um ID para este passo, para que possamos usar seu resultado depois.
         run: echo "UV_CACHE_DIR=$(uv cache dir)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         shell: pwsh
 
-      # Passo 5: Gerencia o cache das dependências para acelerar futuras execuções.
+      # Passo 7: Gerencia o cache das dependências para acelerar futuras execuções.
       - name: Cache uv dependencies
         uses: actions/cache@v4
         with:
@@ -53,25 +67,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-uv-
 
-      # Passo 6: Instala as dependências do projeto e de desenvolvimento usando o 'uv'.
+      # Passo 8: Instala as dependências do projeto e de desenvolvimento usando o 'uv'.
       # Se o cache foi restaurado com sucesso no passo anterior, este comando será quase instantâneo.
       - name: Install dependencies with uv
         run: uv pip install .[dev]
         shell: pwsh
 
-      # Passo 7: Verifica se a formatação do código está correta com o Ruff.
+      # Passo 9: Verifica se a formatação do código está correta com o Ruff.
       # O '--check' não modifica os arquivos, apenas falha se houver erro de formatação.
       - name: Check formatting with Ruff
         run: ruff format --check .
 
-      # Passo 8: Analisa o código em busca de possíveis erros, bugs e problemas de estilo com o linter do Ruff.
+      # Passo 10: Analisa o código em busca de possíveis erros, bugs e problemas de estilo com o linter do Ruff.
       - name: Lint with Ruff
         run: ruff check .
 
-      # Passo 9: Realiza a verificação estática de tipos para encontrar inconsistências entre os tipos de dados.
+      # Passo 11: Realiza a verificação estática de tipos para encontrar inconsistências entre os tipos de dados.
       - name: Type check with Mypy
         run: mypy .
 
-      # Passo 10: Executa a suíte de testes automatizados do projeto com o Pytest.
+      # Passo 12: Executa a suíte de testes automatizados do projeto com o Pytest.
       - name: Test with pytest
         run: pytest
